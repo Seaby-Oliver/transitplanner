@@ -88,15 +88,13 @@ def main():
     # 7. Light curve
     obstime, flux, info = generate_lightcurve(target_name, snr)
 
-    print(f"Observation Time: {(info['duration_hours']+ 2):.3f}")
-    print(f"Predicted duration: {info['duration_hours']:.3f} hours")
-    print(f"Predicted depth: {info['depth_mag']:.3f} mag")
-    print(f"Estimated error: {info['error']:.5f}")
+  
     
     plot_lightcurve(obstime, flux, info, title=f"{target_name} Predicted Light Curve")
 
 if __name__ == "__main__":
     main()
+
 
 
 
