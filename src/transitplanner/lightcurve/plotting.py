@@ -27,6 +27,10 @@ def plot_lightcurve(obstime, flux, info, title="Light Curve"):
     ingress, indepth, egress = info["markers"]
     error = info["error"]
 
+    print(f"Observation Time: {(info['duration_hours']+ 2):.3f}")
+    print(f"Predicted duration: {info['duration_hours']:.3f} hours")
+    print(f"Predicted depth: {info['depth_mag']:.3f} mag")
+    print(f"Estimated error: {info['error']:.5f}")
     plt.figure()
     plt.plot(obstime, flux)
     plt.errorbar(obstime[[ingress, indepth, egress]],  flux[[ingress, indepth, egress]], error, fmt="o", color="red" )
@@ -35,3 +39,4 @@ def plot_lightcurve(obstime, flux, info, title="Light Curve"):
     plt.title(title)
     plt.savefig("lightcurve.png", dpi=150, bbox_inches="tight")
     plt.show()
+
