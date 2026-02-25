@@ -9,6 +9,9 @@ from .geometry import radec_to_altaz
 from .ephemeris import next_transit
 from ..io.exoclock import load_exoclock_data
 
+
+
+
 def find_observable_exoplanets(
         longitude, latitude,
         start_date_str, span_days,
@@ -18,11 +21,18 @@ def find_observable_exoplanets(
     start_date = datetime.strptime(start_date_str, "%d/%m/%y")
     end_date = start_date + timedelta(days=span_days)
 
+    # ------------------------- Change 1: Pre-create location and observer once -------------------------
     location = EarthLocation(lat=latitude*u.deg, lon=longitude*u.deg)
     observer = Observer(location=location, name="Observer", timezone="UTC")
+    # -----------------------------------------------------------------------------------------------
 
-    url = "https://www.exoclock.space/database/planets_json"
-    exoclock_planets =load_exoclock_data()
+    # ------------------------- Change 2: Precompute start/end times once -----------------------------
+    t_start = Time(start_date)
+    t_end   = Time(end_date)
+    t_start_bjd = t_start.tdb.jd
+    # -----------------------------------------------------------------------------------------------
+
+    exoclock_planets = load_exoclock_data()
     results = []
 
     for planet in exoclock_planets.values():
@@ -51,35 +61,38 @@ def find_observable_exoplanets(
         if t0 is None or period_days is None or duration_hours is None:
             continue
 
-        t_start = Time(start_date)
-        t_end = Time(end_date)
-        t_start_bjd = t_start.tdb.jd
+        # ------------------------- Change 3: Precompute half duration once -----------------------------
+        half_duration = (duration_hours / 2.0) * u.hour
+        # -----------------------------------------------------------------------------------------------
 
         current_mid_jd = next_transit(t0, period_days, t_start_bjd)
         current_mid = Time(current_mid_jd, format="jd", scale="tdb")
-        
 
         while current_mid <= t_end:
 
-            half_duration = (duration_hours / 2.0) * u.hour
             transit_start = current_mid - half_duration
-            transit_end = current_mid + half_duration
-            one_hour_before_ingress = transit_start - 1*u.hour
-            one_hour_after_egress = transit_end + 1*u.hour
+            transit_end   = current_mid + half_duration
 
-            sun_alt_start = observer.sun_altaz(transit_start).alt.deg
-            sun_alt_mid   = observer.sun_altaz(current_mid).alt.deg
-            sun_alt_end   = observer.sun_altaz(transit_end).alt.deg
+            # ------------------------- Change 4: Vectorized Sun altitude call -----------------------------
+            sun_times = Time([transit_start, current_mid, transit_end])
+            sun_altitudes = observer.sun_altaz(sun_times).alt.deg  # returns array of 3
+            sun_alt_start, sun_alt_mid, sun_alt_end = sun_altitudes
+            # -----------------------------------------------------------------------------------------------
 
+            # Skip transit if Sun is not fully below -18 deg at all key times
             if not (sun_alt_start < -18 and sun_alt_mid < -18 and sun_alt_end < -18):
                 current_mid += period_days * u.day
                 continue
 
-            alt_start, az_start = radec_to_altaz(coord, location=location, obstime=transit_start)
-            alt_mid, az_mid     = radec_to_altaz(coord, location=location, obstime=current_mid)
-            alt_end, az_end     = radec_to_altaz(coord, location=location, obstime=transit_end)
-                
-           
+            # ------------------------- Change 5: Pre-create AltAz frames ----------------------------------
+            frame_start = AltAz(obstime=transit_start, location=location)
+            frame_mid   = AltAz(obstime=current_mid, location=location)
+            frame_end   = AltAz(obstime=transit_end, location=location)
+
+            alt_start, az_start = coord.transform_to(frame_start).alt.deg, coord.transform_to(frame_start).az.deg
+            alt_mid,   az_mid   = coord.transform_to(frame_mid).alt.deg,   coord.transform_to(frame_mid).az.deg
+            alt_end,   az_end   = coord.transform_to(frame_end).alt.deg,   coord.transform_to(frame_end).az.deg
+            # -----------------------------------------------------------------------------------------------
 
             if not (
                 alt_start >= min_altitude and
@@ -106,9 +119,5 @@ def find_observable_exoplanets(
             current_mid += period_days * u.day
 
     return results
-
-
-
-
-
-
+                
+                
