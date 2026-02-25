@@ -43,8 +43,8 @@ def plot_lightcurve(obstime, flux, info, title="Light Curve"):
     trans = transforms.blended_transform_factory(ax.transData, ax.transAxes)
     y_ing_ax = (flux[ingress] - ymin) / (ymax - ymin)
     y_egr_ax = (flux[egress] - ymin) / (ymax - ymin)
-    y_t2_ax = (flux[ingress+t2] - ymin) / (ymax - ymin)
-    y_t3_ax = (flux[indepth+t3]- ymin) / (ymax - ymin)
+    y_t2_ax = (flux[t2] - ymin) / (ymax - ymin)
+    y_t3_ax = (flux[t3]- ymin) / (ymax - ymin)
 
     # Draw vertical lines from bottom of plot to contact points
     ax.plot([obstime[ingress], obstime[ingress]],
@@ -91,3 +91,4 @@ def plot_lightcurve(obstime, flux, info, title="Light Curve"):
     
     plt.savefig('lightcurve.png',dpi=150,bbox_inches='tight')
     plt.show
+
