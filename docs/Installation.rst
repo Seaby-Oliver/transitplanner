@@ -46,7 +46,7 @@ Installing from GitHub
 
 The project can be installed directly from the GitHub repository using ``pip``::
 
-    pip install git+https://github.com/Salmanul-Farisi-551/transitplanner.git
+    pip install git+https://github.com/Seaby-Oliver/transitplanner.git
 
 Verifying the Installation
 --------------------------
