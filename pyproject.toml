@@ -27,7 +27,8 @@ dependencies = [
     "astroplan",
     "pylightcurve",
     "openpyxl",
-    "pyarrow"
+    "pyarrow",
+    "furo"
 ]
 
 [tool.setuptools]
