@@ -14,6 +14,10 @@ from .io.nasa import load_nasa_data
 from .io.exoclock import load_exoclock_data
 
 import time
+import tracemalloc
+
+tracemalloc.start()
+start_1 = time.time()
 
 def main():
     # User inputs
@@ -121,7 +125,12 @@ def main():
 
     end = time.time()
     Run_time_LIGHT_curve_prediction = end - start
-
+    
+    current, peak = tracemalloc.get_traced_memory()
+    print(" ")
+    print("Peak memory usage:", peak / 10**6, "MB")
+    tracemalloc.stop()
+    
     print(" ")
     print("no of planets processed:",length_of_exoclock_database)
     print("transit prediction runtime:", Run_time_target_prediction, "seconds")
@@ -129,9 +138,12 @@ def main():
     print("NASA data runtime:", Run_time_loading_NASA, "seconds")
     print("visibility constarints runtime:", Run_time_visibility, "seconds")
     print("light curve prediction runtime:", Run_time_LIGHT_curve_prediction, "seconds")
-    
+end_1 = time.time()
+print("total runtime:", end_1 - start_1, "seconds")
+   
 if __name__ == "__main__":
     main()
+
 
 
 
