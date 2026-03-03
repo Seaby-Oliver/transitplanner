@@ -80,8 +80,8 @@ def main():
         )
         planet["Status"] = "Observable" if apply_filters(planet, DEC_MIN, DEC_MAX, SNR_LIM) else "Not Observable"
         
-     end = time.time()    
-     Run_time_visibility = end - start 
+    end = time.time()    
+    Run_time_visibility = end - start 
 
     # 5. Summary table
     check_observability_table(
@@ -129,6 +129,7 @@ def main():
     
 if __name__ == "__main__":
     main()
+
 
 
 
