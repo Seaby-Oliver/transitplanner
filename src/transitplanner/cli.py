@@ -55,6 +55,7 @@ def main():
     end = time.time()
     Run_time_loading_ExoClock = end - start
 
+    length_of_exoclock_database = len(exoclock_planets)
     start = time.time()
 
     nasa=load_nasa_data()
@@ -121,6 +122,8 @@ def main():
     end = time.time()
     Run_time_LIGHT_curve_prediction = end - start
 
+    print(" ")
+    print("no of planets processed:",length_of_exoclock_database)
     print("transit prediction runtime:", Run_time_target_prediction, "seconds")
     print("ExoClock data  runtime:", Run_time_loading_ExoClock, "seconds")
     print("NASA data runtime:", Run_time_loading_NASA, "seconds")
@@ -129,6 +132,7 @@ def main():
     
 if __name__ == "__main__":
     main()
+
 
 
 
