@@ -94,13 +94,13 @@ def find_observable_exoplanets(
             alt_end,   az_end   = coord.transform_to(frame_end).alt.deg,   coord.transform_to(frame_end).az.deg
             # -----------------------------------------------------------------------------------------------
 
-            #if not (
-            #    alt_start >= min_altitude and
-            #    alt_mid >= min_altitude and
-            #    alt_end >= min_altitude
-            #):
-            #    current_mid += period_days * u.day
-            #    continue
+            if not (
+                 alt_start >= min_altitude and
+                 alt_mid >= min_altitude and
+                 alt_end >= min_altitude
+             ):
+                 current_mid += period_days * u.day
+                 continue
 
             results.append({
                 "Object": planet["name"],
@@ -121,4 +121,5 @@ def find_observable_exoplanets(
     return results
                 
                 
+
 
