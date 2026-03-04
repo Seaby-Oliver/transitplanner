@@ -17,7 +17,6 @@ import time
 import tracemalloc
 
 tracemalloc.start()
-start_1 = time.time()
 
 def main():
     # User inputs
@@ -142,8 +141,8 @@ def main():
    
 if __name__ == "__main__":
     main()
-end_1 = time.time()
-print("total runtime:", end_1 - start_1, "seconds")
+
+
 
 
 
