@@ -41,7 +41,7 @@ def check_observability_table(planet_list, export_csv=None, export_excel=None):
             "RA": planet['RA'],
             "DEC": planet['Dec'],
             "Status": planet['Status'],
-             "Priority": planet.get("priority")
+            "Priority": planet.get("priority")
         })
 
     df = pd.DataFrame(summary_data)
