@@ -13,10 +13,8 @@ from .lightcurve.plotting import plot_lightcurve
 from .io.nasa import load_nasa_data
 from .io.exoclock import load_exoclock_data
 
-import time
 
 def main():
-    start = time.time()
     # User inputs
     longitude = float(input("Enter longitude (degrees): "))
     latitude = float(input("Enter latitude (degrees): "))
@@ -96,20 +94,17 @@ def main():
     # 7. Light curve
     obstime, flux, info = generate_lightcurve(target_name, snr)
 
-    print(f"Observation Time: {(info['duration_hours']+ 2):.3f}")
+    print(f"\nObservation Time: {(info['duration_hours']+ 2):.3f}")
     print(f"Predicted duration: {info['duration_hours']:.3f} hours")
     print(f"Predicted depth: {info['depth_mag']:.3f} mag")
     print(f"Estimated error: {info['error']:.5f}")
     
     plot_lightcurve(obstime, flux, info, title=f"{target_name} Predicted Light Curve")
     
-    end = time.time()
-    print("total runtime:", end - start, "seconds")
-    print(" avarage time", (end - start)/len(exoclock_planets),"seconds")
-
    
 if __name__ == "__main__":
     main()
+
 
 
 
