@@ -18,7 +18,7 @@ The project structure is inspired by established astronomy software and is inten
   - [How to install](#how-to-install)
     - [Install from source code](#install-from-source-code)
   - [Documentation](#documentation)
-    - [Build the html documentation](#build-the-html-documentation)
+    
     
   
 
@@ -33,3 +33,7 @@ To install from source, clone the repository and move inside the project directo
 git clone https://github.com/Seaby-Oliver/transitplanner
 cd transitplanner
 pip install .
+```
+## Documentation
+
+Full documentation can be accessed here:[https://transitplanner.readthedocs.io/en/latest/](https://transitplanner.readthedocs.io/en/latest/)
